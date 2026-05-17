@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knock - Not</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Top Navigation -->
+        <nav id="topbar">
+            <div class="logo">
+                <div class="logo-icon">K</div>
+                <div>
+                    <span>Knock - Not</span>
+                    <div class="logo-sub">ghost booking detector</div>
+                </div>
+            </div>
+            <div class="nav-tabs">
+                <button class="tab active" data-view="live" onclick="switchView('live')">Live View</button>
+                <button class="tab" data-view="setup" onclick="switchView('setup')">Setup</button>
+            </div>
+            <div class="nav-status">
+                <span id="engine-status" class="status-dot offline"></span>
+                <span id="engine-status-text">Connecting...</span>
+            </div>
+        </nav>
+
+        <!-- Floor Selector -->
+        <div id="floor-bar">
+            <select id="floor-select" onchange="onFloorChange()">
+                <option value="">Select a floor...</option>
+            </select>
+            <button id="btn-add-floor" onclick="showAddFloorModal()" style="display:none;">+ Add Floor</button>
+            <button id="btn-delete-floor" onclick="deleteCurrentFloor()" style="display:none;">Delete Floor</button>
+            <div id="summary-stats" class="summary-stats"></div>
+        </div>
+
+        <!-- Main Canvas Area -->
+        <div id="main-area">
+            <!-- Sidebar (setup mode) -->
+            <div id="sidebar" class="hidden">
+                <h3>Floor Setup</h3>
+                <div class="sidebar-section">
+                    <h4>Rooms</h4>
+                    <div id="room-list"></div>
+                    <button class="btn-sm" onclick="startDrawRoom()">+ Draw Room</button>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Access Points</h4>
+                    <div id="ap-list"></div>
+                    <button class="btn-sm" onclick="startPlaceAP()">+ Place AP</button>
+                </div>
+            </div>
+
+            <!-- Canvas / Map Area -->
+            <div id="canvas-container">
+                <canvas id="map-canvas"></canvas>
+                <div id="no-floor-msg">
+                    <p>No floor selected.</p>
+                    <p>Pick one from the dropdown or switch to Setup to add a new floor.</p>
+                    <div class="doodle-hint">~ drag to draw rooms, click to place APs ~</div>
+                </div>
+                <div id="draw-hint" class="hidden"></div>
+                <div id="cursor-coords"></div>
+            </div>
+
+            <!-- Legend (live mode) -->
+            <div id="legend" class="hidden">
+                <h4>Status</h4>
+                <div class="legend-item"><span class="swatch" style="background:var(--green)"></span> Vacant</div>
+                <div class="legend-item"><span class="swatch" style="background:var(--red)"></span> Occupied</div>
+                <div class="legend-item"><span class="swatch" style="background:var(--orange)"></span> Ghost</div>
+                <div class="legend-item"><span class="swatch" style="background:var(--blue)"></span> Ad-hoc</div>
+                <div style="margin: 14px 0 10px; border-top: 1px solid var(--border-light);"></div>
+                <div class="legend-item"><span class="dot-legend" style="background:#c97b4b"></span> Device in room</div>
+                <div class="legend-item"><span class="dot-legend" style="background:#9b8e7e"></span> Hallway / outside</div>
+                <div class="legend-item"><span class="ap-legend">&#9653;</span> Access Point</div>
+                <div style="margin: 14px 0 10px; border-top: 1px solid var(--border-light);"></div>
+                <div id="debug-info" style="font-size:11px;color:var(--text-muted);line-height:1.5;"></div>
+            </div>
+        </div>
+
+        <!-- Tooltip -->
+        <div id="tooltip" class="hidden"></div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal-overlay" class="hidden" onclick="closeModal()">
+        <div id="modal" onclick="event.stopPropagation()">
+            <h3 id="modal-title"></h3>
+            <div id="modal-subtitle" class="modal-subtitle"></div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
